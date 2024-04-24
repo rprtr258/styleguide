@@ -1,0 +1,3 @@
+- use `context.Background` only in `main` and tests, though there can be cases when test hang up, in that case use `context.WithTimeout(context.Background(), 5*time.Second)` in test
+- always pass context to long lived goroutines
+- never pass data using `Context`. `trace_id` like things are not considered as data as they are not used in application

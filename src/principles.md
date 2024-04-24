@@ -1,0 +1,2 @@
+- simplicity: make thing as simple as it can be
+- minimalicity: don't introduce additional concepts, unless you really need them

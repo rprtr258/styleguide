@@ -1,0 +1,8 @@
+- `interface{}` says nothing.
+- A little copying is better than a little dependency.
+- Clear is better than clever.
+- Reflection is never clear.
+- Errors are values.
+- Don't just check errors, handle them gracefully.
+- Don't panic.
+- Pass interfaces, return implementations.

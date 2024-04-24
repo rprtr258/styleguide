@@ -1,0 +1,3 @@
+- to reuse same piece of memory in different places
+- to pass around mutexes and other synchronization primitives
+- to use pointers returned from external libraries

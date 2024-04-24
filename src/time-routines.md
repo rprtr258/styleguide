@@ -1,0 +1,5 @@
+- use `time` package, no custom structures or seconds with `const Day = 24 * 60 * 60`
+- though, there is an issue with expressing date ranges using `time` package, for that use `struct DateRange {days, months, years int}` with `date.AddDate(r.years, r.months, r.days)`
+- never use `time.Sleep`, except maybe in tests or one time scripts/benchmarks
+- never call `time.Now()` several times in a func if they would return near times. if you need current timestamp, store it in variable and then use: `now := time.Now()`
+- remember about timezones when using `time.Time` related things, store timestamps in UTC timezone, if you need to store timezone which is needed only for displaying, store it separately or in dedicated database type

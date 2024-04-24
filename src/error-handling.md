@@ -1,0 +1,5 @@
+- `failed to ...` in logs, `action: %w` in `fmt.Errorf` wrappings, I don't want to see messages like `failed to authenticate: failed to check user identity: failed to select user: failed to select: database is unreachable`
+- if some package returns errors, that package should declare which errors it might return(unless Golang authors add sum types, functions should use sum of possible errors instead). package should not reuse errors from used libraries, e.g. data access layer should not return `sql.ErrNoRows` if no rows is returned, it should instead declare their own errors like `ErrPersonNotFound`
+- declare most useful errors as exported var/types
+- given two previous points, while calling external code (libraries or local package) you will only need to handle errors declared by that package and maybe one really weird "unknown" error. That can be done using equality for error vars and type assertion for error types, not `are.Is`/`errors.As` are needed.
+- after handling always wrap error to package-specific error or just `fmt.Errorf`

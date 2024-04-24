@@ -17,12 +17,9 @@
    * [Project organization](#project-organization)
    * [Error handling](#error-handling)
    * [Other](#other)
-
-
 ## Principles
 - simplicity: make thing as simple as it can be
 - minimalicity: don't introduce additional concepts, unless you really need them
-
 
 ## Practices
 ### Just some Go proverbs I agree with, with no details
@@ -54,6 +51,7 @@ func mustLoadLoc(name string) *time.Location {
 - prefer using global variables as immutable one-time initialized values
 - if write access is required, it must be scoped and protected with mutex if there is any chance to use it from multiple goroutines
 - if global var is constant and primitive make it `const` (non-primitives can't be `const` sadly)
+
 
 ### Use pointers only if they are really needed
 - to reuse same piece of memory in different places
@@ -216,6 +214,7 @@ a := &MyStruct{
 
 - treat function arguments as const/immutable most of the time
 
+
 ### Reduce nesting
 - simplify `if`-s using conditions
 
@@ -363,6 +362,7 @@ if !hasPermission {
 return nil
 ```
 </td></tr></tbody></table>
+
 
 ### On panicking
 - don't `panic` in general
@@ -516,3 +516,4 @@ for name, test := range map[string]struct{
 - if one piece of code with changed parameters is used several times in one place (same "code context"), consider moving it to function
 - if one piece of code with changed parameters is used several times in different places (different "code context"s), consider carefully if it is worth it to move it to function
 - if function is close to purely functional, with few references to global state, try to make it completely functional
+

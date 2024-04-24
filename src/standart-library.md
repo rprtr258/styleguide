@@ -1,0 +1,10 @@
+- use `slices.SortFunc` over `sort.Slice`
+- use `os` and `io` over `ioutil`
+- use `map[K]struct{}` over `map[K]bool` for sets
+- use `any` over `interface{}` as it is more specific
+- use `x == ""` over `len(x) == 0`
+- `strings` are
+    - indexed by bytes aka `s[i]` gives `i`-th byte
+    - `len(s)` gives number of bytes, for rune count use `utf8.RuneCountInString`
+    - iterated by runes and byte index, that is `for i, r := range s` `i` will be index of first rune byte, `r` will be the rune
+- for strange strings in errors/logs use `%q` formatting directive to not miss empty strings or strings with spaces in the end
