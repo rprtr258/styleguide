@@ -16,6 +16,7 @@
    * [Libraries and tools](#libraries-and-tools)
    * [Project organization](#project-organization)
    * [Error handling](#error-handling)
+   * [Comments](#comments)
    * [Other](#other)
 ## Principles
 - simplicity: make thing as simple as it can be
@@ -60,13 +61,37 @@ func mustLoadLoc(name string) *time.Location {
 
 ### Naming
 - camelCase, I hope this one is obvious
-- variables with similar namings (e.g. enum values) should use common prefix, e.g. `EnvDev`, `EnvStg`, `EnvProd`, not `DevEnv`, `StgEnv`, `ProdEnv`
-- use consistent naming, e.g. if you name user `User`, name it `User` everywhere: database tables, scan structs, handler structs, protobufs, not `Account` or `Profile` in some random cases instead
+- similar namings should go from more abstract words, followed with more specific
+  - e.g. enum values should go like: `EnvDev`, `EnvStg`, `EnvProd`, not `DevEnv`, `StgEnv`, `ProdEnv`. As `Env` is more abstract. Such namings are easier to find and they align nicely.
+  - "value modifiers" are reflected as concrete parts:
+    - `idStr` (meaning marshalled `id`) and `id`
+    - `password`, `passwordBase64` (which is `base64(password)`), `passwordBase64Hash` (which is `hash(base64(password))`), etc.
+- names should be either descriptive or consistent, both is even better
+  - descriptive name includes `what variable value is`, so not `tmp`, but `tmpFile` or `tmpBuffer`
+  - use consistent naming, e.g. if you name user `User`, name it `User` everywhere: database tables, scan structs, handler structs, protobufs, not `Account` or `Profile` in some random cases instead
+  - try to avoid putting types in names, though that might be useful sometimes, e.g. `idStr` means `id` in form of `string` which is yet not parsed
+  - unsized types should include units, e.g. `sizeBytes int64` instead of `size int64`, `delay_secs int` instead of `delay int`, etc.
 - receiver names are 1-2 characters long, and are first letter of receiver type, e.g. `(c client)`
 - receiver names must be the same across all methods of the same type
-- `id` or `ID`, same with other abbreviations like `URL`, `HTTP`, etc
-- package exported things are used as `package.Thing`, so `Client`, not `RedisClient` in `redis` package
+- `id` or `ID`, never `Id`, same with other abbreviations like `URL`, `HTTP`, etc
+- package exported things are used as `package.Thing`, so use `Client` instead of `RedisClient` in `redis` package
 - noun for one thing, plural for collection/set of many things
+- boolean vars and predicate functions (functions returning `bool`) should be prefixed with `is/has/can/should`
+- avoid negating in names, as it leads to double-negations and hard to understand, e.g. `isAuthorized` instead of `isNotAuthorized` or `notAuthorized`, or `isUnauthorized`
+- sometimes you can introduce `explanatory` variables, whose purpose is assign name to complex expression:
+```go
+isImportant := event.Importance == ImportanceHigh
+isWhitelisted := whitelist.Contains(event.Type)
+if isWhitelisted && !isImportant {
+  // skip
+  return
+}
+// instead of
+if whitelist.Contains(event.Type) && event.Importance != ImportanceHigh {
+  // skip
+  return
+}
+```
 - common abbreviations:
 
 |||||
@@ -481,6 +506,13 @@ you may add `context.Context` initialization, signal handling, parse arguments, 
 - given two previous points, while calling external code (libraries or local package) you will only need to handle errors declared by that package and maybe one really weird "unknown" error. That can be done using equality for error vars and type assertion for error types, not `are.Is`/`errors.As` are needed.
 - after handling always wrap error to package-specific error or just `fmt.Errorf`
 
+### Comments
+- no commented code and no code `not used for now, will be needed in future` or `though it is unused now, maybe it will be need in future`
+- comments are for things which can't be expressed as code, e.g. links to issues, standards, docs, implementation explanation details, formulas, etc.
+- strive to reduce `TODO` comments, instead open issues to fix the problem
+- comment complex logic, unsafe code, hacks. In most other cases clear naming is enough.
+- do not use comments to just rephrase what is being done in code, as I can read the code itself
+
 ### Other
 - don't ever mix sideeffects code with expressions, so no `messenger.SendUserCreatedNotification(createUser().ID)` like things
 - if several functions do same thing, use most specific one, as they are there for your convenience/performance/expressiveness:
@@ -511,9 +543,15 @@ for name, test := range map[string]struct{
 - inline `if err := do(); err != nil`, just a personal preference, also it is harder to shadow another `err` in such way
 - lines are less than 80 chars, max 120, because two panes of 80-width code fits screen nicely
 - no dead, unused code if possible, use [unused](https://github.com/dominikh/go-tools/tree/master/unused) to find unused private symbols and [punused](https://github.com/bep/punused/) for public symbols. Though I recommend using `punused` only manually as it gives many false positives, e.g. for mock methods, grpc mehods, interface implementations methods.
-- no commented code and no code `not used for now, will be needed in future` or `though it is unused now, maybe it will be need in future`
 - if a function is called from a single place, consider inlining it
 - if one piece of code with changed parameters is used several times in one place (same "code context"), consider moving it to function
 - if one piece of code with changed parameters is used several times in different places (different "code context"s), consider carefully if it is worth it to move it to function
 - if function is close to purely functional, with few references to global state, try to make it completely functional
+- learn logic/boolean-algebra to analyze and transform/simplify conditionals, e.g.
+```go
+if a { ... }
+// instead of
+if a || a && b { ... }
+```
+in general, try to transform conditions to Disjunctive normal form (that is `a && b && c || d && e`) as it is flat and simple enough
 

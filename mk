@@ -73,6 +73,7 @@ summary := [
     "Libraries and tools",
     "Project organization",
     "Error handling",
+    "Comments",
     "Other",
   ],
 ]

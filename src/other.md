@@ -27,8 +27,14 @@ for name, test := range map[string]struct{
 - inline `if err := do(); err != nil`, just a personal preference, also it is harder to shadow another `err` in such way
 - lines are less than 80 chars, max 120, because two panes of 80-width code fits screen nicely
 - no dead, unused code if possible, use [unused](https://github.com/dominikh/go-tools/tree/master/unused) to find unused private symbols and [punused](https://github.com/bep/punused/) for public symbols. Though I recommend using `punused` only manually as it gives many false positives, e.g. for mock methods, grpc mehods, interface implementations methods.
-- no commented code and no code `not used for now, will be needed in future` or `though it is unused now, maybe it will be need in future`
 - if a function is called from a single place, consider inlining it
 - if one piece of code with changed parameters is used several times in one place (same "code context"), consider moving it to function
 - if one piece of code with changed parameters is used several times in different places (different "code context"s), consider carefully if it is worth it to move it to function
 - if function is close to purely functional, with few references to global state, try to make it completely functional
+- learn logic/boolean-algebra to analyze and transform/simplify conditionals, e.g.
+```go
+if a { ... }
+// instead of
+if a || a && b { ... }
+```
+in general, try to transform conditions to Disjunctive normal form (that is `a && b && c || d && e`) as it is flat and simple enough

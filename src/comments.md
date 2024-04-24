@@ -1,0 +1,5 @@
+- no commented code and no code `not used for now, will be needed in future` or `though it is unused now, maybe it will be need in future`
+- comments are for things which can't be expressed as code, e.g. links to issues, standards, docs, implementation explanation details, formulas, etc.
+- strive to reduce `TODO` comments, instead open issues to fix the problem
+- comment complex logic, unsafe code, hacks. In most other cases clear naming is enough.
+- do not use comments to just rephrase what is being done in code, as I can read the code itself
