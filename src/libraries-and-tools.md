@@ -6,4 +6,5 @@
 - use `slog`/`zerolog`/`zap`/etc over `log`, as structured logs are easier to parse programmaticaly, can be pleasantly displayed and bit safer to write
 - for configuration use [jsonnet](https://jsonnet.org/) over combinations of `yaml`, `json`, `hcl`, etc... files with includes, extends, cross references, loops encoded inside according syntax, etc... (until I find format with same features along with typing (Go has too weak typing system, unsure on CUE))
 - use [`gofumpt -l -w .`](https://github.com/mvdan/gofumpt) as more strict formatting
+- use [`goimports-reviser`](https://github.com/incu6us/goimports-reviser) for consistent imports ordering: std, libraries, local
 - use sorted map for sorted map (maps which can be iterated over keys in order), e.g. [this implementation](https://github.com/rprtr258/fun/blob/master/orderedmap/orderedmap.go#L29)
