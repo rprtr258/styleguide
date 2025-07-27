@@ -11,6 +11,7 @@ func mustLoadLoc(name string) *time.Location {
     return loc
 }
 ```
+  - the only valid use for `init` is to check some conditions on global variables that theoretically might be done in compile time, e.g. check two maps have equal length
 - precompile constant templates, regexes, etc as global variables using method above
 - name globals using underscore at the beginning: `var _cache map[int]int`, not `var cache map[int]int` to differentiate from locals and privates. This is important as access to global variables must be considered: it's scattered around and might blow up with concurrency if there are writes to it.
 - prefer using global variables as immutable one-time initialized values
