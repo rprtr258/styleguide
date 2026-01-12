@@ -8,3 +8,8 @@
 - use [`gofumpt -l -w .`](https://github.com/mvdan/gofumpt) as more strict formatting
 - use [`goimports-reviser`](https://github.com/incu6us/goimports-reviser) for consistent imports ordering: std, libraries, local
 - use sorted map for sorted map (maps which can be iterated over keys in order), e.g. [this implementation](https://github.com/rprtr258/fun/blob/master/orderedmap/orderedmap.go#L29)
+- find and eliminate deadcode using following commands:
+```bash
+golangci-lint run --disable-all --enable unused ./...
+go run golang.org/x/tools/cmd/deadcode@latest ./...
+```
